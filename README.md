@@ -1,10 +1,16 @@
 # ReactJS Coding test
 
-fork this repo
+Fork this repo
 
-run `npm install`
-run `grunt dev` for watcher
-run `node app` to start server
+***
+
+`npm install`
+
+`grunt dev` for watcher
+
+`node app` to start server
+
+***
 
 App is now running on `localhost:3000`
 

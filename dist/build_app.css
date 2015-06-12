@@ -1,1 +1,48 @@
-body{background-color:white}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; }
+
+body {
+  background-color: white;
+  font-family: Helvetica, Arial; }
+
+.container {
+  padding: 1em;
+  max-width: 600px;
+  margin: 0 auto; }
+
+.league-table {
+  border: 1px solid #ccc;
+  margin: 1em; }
+
+.league-table__row {
+  padding: 0.5em;
+  width: 100%; }
+  .league-table__row:nth-child(even) {
+    background-color: #efefef; }
+
+.perc {
+  display: inline-block; }
+  .perc.one {
+    width: 10%; }
+  .perc.two {
+    width: 20%; }
+  .perc.three {
+    width: 30%; }
+  .perc.four {
+    width: 40%; }
+  .perc.five {
+    width: 50%; }
+  .perc.six {
+    width: 60%; }
+  .perc.seven {
+    width: 70%; }
+  .perc.eight {
+    width: 80%; }
+  .perc.nine {
+    width: 90%; }
+  .perc.ten {
+    width: 100%; }
+
+/*# sourceMappingURL=build_app.css.map */

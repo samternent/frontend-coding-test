@@ -3,6 +3,12 @@ React = require('react')
 Components  = require('./components/manifest.coffee')
 Data        = require('./data/league_table.json.coffee')
 
+# Render React UI
+#
+# @mixin
+#
+# @author Sam
+#
 RenderUI = ->
 
   components = document.querySelectorAll('[data-component-ui]')

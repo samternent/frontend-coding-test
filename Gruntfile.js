@@ -7,9 +7,18 @@ module.exports = function(grunt) {
     //
 
     watch: {
-      files: [
-        'src/javascripts/**/*.coffee'
-      ]
+      css: {
+        files: [
+          'src/styles/**/*.scss'
+        ],
+        tasks: ['sass'],
+      },
+      scripts: {
+        files: [
+          'src/javascripts/**/*.coffee'
+        ],
+        tasks: ['browserify']
+      }
     },
 
     //
@@ -32,24 +41,18 @@ module.exports = function(grunt) {
         },
         options: {
           transform: ['coffeeify'],
-          watch: true,
-          keepAlive: true
         }
       }
     },
 
     sass: {
       dist: {
-        options: {
-          style: 'compressed',
-          sourcemap: 'none',
-          update: true
-        },
         files: {
           'dist/build_app.css': 'src/styles/app.scss'
         }
       }
     },
+
 
     //
     // Build Coffee script
@@ -69,6 +72,6 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask("dev", ["sass", "browserify", "watch"]);
+  grunt.registerTask("dev", ["watch"]);
   grunt.registerTask("bundle", ["clean", "coffee", "browserify", "sass"]);
 };

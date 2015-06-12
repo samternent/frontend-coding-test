@@ -3,12 +3,12 @@ React         = require('react')
 DOM           = require('tbg_react_dom')
 
 # Helpers
-TransferToState   = require('tbg_props_to_state')
+TransferToState = require('tbg_props_to_state')
 
 # Mixins
 
 # Components
-Table             = React.createFactory(require('./table/index.coffee'))
+Table           = React.createFactory(require('./table/index.coffee'))
 
 # Flux
 
@@ -67,10 +67,10 @@ App =
         className: 'app'
         },
         DOM.h1(null, 'ReactJS League Table')
+        DOM.h2(null, 'Frontend Coding Test')
         Table({
             table : @state.table
           })
-        DOM.h2(null, 'Frontend Coding Test')
     )
 
 

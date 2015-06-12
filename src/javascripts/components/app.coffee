@@ -3,12 +3,12 @@ React         = require('react')
 DOM           = require('tbg_react_dom')
 
 # Helpers
-Quotes        = require('../data/quotes.coffee');
+TransferToState   = require('tbg_props_to_state')
 
 # Mixins
 
 # Components
-SocialButton  = React.createFactory(require('./social_button.coffee'))
+Table             = React.createFactory(require('./table/index.coffee'))
 
 # Flux
 
@@ -19,13 +19,13 @@ SocialButton  = React.createFactory(require('./social_button.coffee'))
 #
 # @author Sam
 #
-ZlatanSays =
+App =
 
   # --------------------------------------------
   # Defaults
   # --------------------------------------------
 
-  displayName   : 'ZlatanSays'
+  displayName   : 'App'
   propTypes     : {
                   }
   mixins        : []
@@ -36,17 +36,11 @@ ZlatanSays =
   # --------------------------------------------
 
   getInitialState: ->
-    quote       : 0
+    TransferToState(@props,{
+        table   : 'data'
+      })
 
   getDefaultProps: ->
-
-
-  getQuote: ->
-    rand = Math.floor(Math.random() * Quotes.length)
-    if @state and rand == @state.quote
-      @getQuote()
-    else
-      @setState quote: rand
 
 
   # --------------------------------------------
@@ -56,18 +50,12 @@ ZlatanSays =
   componentWillMount: ->          # add event listeners (Flux Store, WebSocket, document)@
   componentWillReceiveProps: ->   # change state based on props change
   componentDidMount: ->           # data request (XHR)
-    @getQuote()
-
   componentWillUnmount: ->        # remove event listeners
 
 
   # --------------------------------------------
   # Event handlers
   # --------------------------------------------
-
-  _handleClick: (e) ->
-    @getQuote()
-
 
 
   # --------------------------------------------
@@ -76,15 +64,14 @@ ZlatanSays =
 
   render: ->
     DOM.div({
-        className: 'zlatan-says'
+        className: 'app'
         },
-      DOM.div({ className: 'question' }, Quotes[ @state.quote ].question )
-
-      DOM.h1({ onClick: @_handleClick }, 'zlatan says' )
-      DOM.div({ className: 'quote' }, Quotes[ @state.quote ].quote )
-      SocialButton({ buttonType: 'facebook', buttonText: 'Share', title: Quotes[ @state.quote ].quote, link: 'sa' })
-      SocialButton({ buttonType: 'twitter', buttonText: 'Tweet', title: Quotes[ @state.quote ].quote, link: 'sa' })
+        DOM.h1(null, 'ReactJS League Table')
+        Table({
+            table : @state.table
+          })
+        DOM.h2(null, 'Frontend Coding Test')
     )
 
 
-module.exports = React.createClass(ZlatanSays)
+module.exports = React.createClass(App)

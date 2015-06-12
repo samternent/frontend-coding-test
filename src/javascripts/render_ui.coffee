@@ -1,7 +1,7 @@
 React = require('react')
 
-Components = require('./components/manifest.coffee')
-
+Components  = require('./components/manifest.coffee')
+Data        = require('./data/league_table.json.coffee')
 
 RenderUI = ->
 
@@ -12,9 +12,11 @@ RenderUI = ->
     data = el.getAttribute('data-component-data')
 
     component = React.createFactory(Components[name])
-    jsonData = if data then JSON.parse(data) else null
+    props     = {
+                  "data" : Data[ data ]
+                }
 
-    React.render(component(jsonData), el)
+    React.render(component(props), el)
   )
 
 

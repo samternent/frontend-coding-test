@@ -11,20 +11,22 @@ DOM           = require('tbg_react_dom')
 # Flux
 
 
-# Table Component
+# Menu Component
 #
 # @mixin
 #
 # @author Sam
 #
-Table =
+Menu =
 
   # --------------------------------------------
   # Defaults
   # --------------------------------------------
 
-  displayName   : 'Table'
-  propTypes     : {}
+  displayName   : 'Menu'
+  propTypes     : {
+
+                  }
   mixins        : []
 
 
@@ -33,9 +35,10 @@ Table =
   # --------------------------------------------
 
   getInitialState: ->
-    null
+    activeId  : 0
 
   getDefaultProps: ->
+
 
 
   # --------------------------------------------
@@ -51,29 +54,27 @@ Table =
   # --------------------------------------------
   # Event handlers
   # --------------------------------------------
-
+  _handleClick: (id) ->
+    @setState activeId  : id
+    @props.handleClick(id)
 
   # --------------------------------------------
   # Render methods
   # --------------------------------------------
+  _renderMenu: ->
+    @props.items.map( (item, id) =>
+        DOM.li({
+            key       : "menu__item_#{id}"
+            className : "menu__item #{ 'isActive' if @state.activeId is id }"
+            onClick   : @_handleClick.bind(@, id)
 
-  # for available row data see ../../data/league_table.coffee
-  _renderTable: ->
-    @props.data.map( (row, i) ->
-        DOM.div({
-            className   : "league-table__row"
-            key         : "row_#{i}"
-          },
-            DOM.span({ className: 'perc one' }, row.pos)
-            DOM.span({ className: 'perc four' }, row.team)
-        )
+          }, item.name)
       )
 
-
   render: ->
-    DOM.div({ className: 'league-table' },
-      @_renderTable()
-    )
+    DOM.ul({
+        className     : 'menu'
+      }, @_renderMenu())
 
 
-module.exports = React.createClass(Table)
+module.exports = React.createClass(Menu)

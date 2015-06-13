@@ -9,6 +9,7 @@ TransferToState = require('tbg_props_to_state')
 
 # Components
 Table           = React.createFactory(require('./table/index.coffee'))
+Menu            = React.createFactory(require('./menu/index.coffee'))
 
 # Flux
 
@@ -36,9 +37,7 @@ App =
   # --------------------------------------------
 
   getInitialState: ->
-    TransferToState(@props,{
-        table   : 'data'
-      })
+    currentId   : 0
 
   getDefaultProps: ->
 
@@ -57,20 +56,28 @@ App =
   # Event handlers
   # --------------------------------------------
 
+  _handleClick: (id) ->
+    @setState currentId: id
 
   # --------------------------------------------
   # Render methods
   # --------------------------------------------
 
+
   render: ->
     DOM.div({
         className: 'app'
-        },
-        DOM.h1(null, 'ReactJS League Table')
-        DOM.h2(null, 'Frontend Coding Test')
-        Table({
-            table : @state.table
+      },
+        DOM.h1({
+          className   : 'title'
+          }, 'ReactJS League Table')
+
+        Menu({
+          items       : @props.leagues
+          handleClick : @_handleClick
           })
+
+        Table(@props.leagues[ @state.currentId ])
     )
 
 

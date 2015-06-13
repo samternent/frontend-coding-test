@@ -6,14 +6,49 @@ body {
 
 .container {
   padding: 1em;
-  max-width: 600px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
 
-.titles {
+.perc {
+  display: inline-block;
 
+  &.one   { width: 10%; }
+  &.two   { width: 20%; }
+  &.three { width: 30%; }
+  &.four  { width: 40%; }
+  &.five  { width: 50%; }
+  &.six   { width: 60%; }
+  &.seven { width: 70%; }
+  &.eight { width: 80%; }
+  &.nine  { width: 90%; }
+  &.ten   { width: 100%;}
 }
+
+// Title
+.title {
+  margin-bottom: 1em;
+}
+// Menu
+
+.menu { list-style-type: none; }
+.menu__item {
+  display: block;
+  cursor: pointer;
+  padding: 0.5em 1em;
+  margin: 0.1em;
+  background-color: lightyellow;
+  border: 1px solid #334;
+
+  &.isActive {
+    background-color: cornflowerblue;
+    color: white;
+  }
+}
+
+
+// League table styles
 .league-table {
   border: 1px solid #ccc;
   margin: 1em;
@@ -26,18 +61,4 @@ body {
   &:nth-child(even) {
     background-color: #efefef;
   }
-}
-
-.perc {
-  display: inline-block;
-  &.one { width: 10%; }
-  &.two { width: 20%; }
-  &.three { width: 30%; }
-  &.four { width: 40%; }
-  &.five { width: 50%; }
-  &.six { width: 60%; }
-  &.seven { width: 70%; }
-  &.eight { width: 80%; }
-  &.nine { width: 90%; }
-  &.ten { width: 100%; }
 }

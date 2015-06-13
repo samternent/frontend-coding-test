@@ -21930,7 +21930,7 @@ module.exports = {
 };
 
 },{"react/addons":2}],177:[function(require,module,exports){
-var App, DOM, React, Table, TransferToState;
+var App, DOM, Menu, React, Table, TransferToState;
 
 React = require('react');
 
@@ -21940,39 +21940,97 @@ TransferToState = require('tbg_props_to_state');
 
 Table = React.createFactory(require('./table/index.coffee'));
 
+Menu = React.createFactory(require('./menu/index.coffee'));
+
 App = {
   displayName: 'App',
   propTypes: {},
   mixins: [],
   getInitialState: function() {
-    return TransferToState(this.props, {
-      table: 'data'
-    });
+    return {
+      currentId: 0
+    };
   },
   getDefaultProps: function() {},
   componentWillMount: function() {},
   componentWillReceiveProps: function() {},
   componentDidMount: function() {},
   componentWillUnmount: function() {},
+  _handleClick: function(id) {
+    return this.setState({
+      currentId: id
+    });
+  },
   render: function() {
     return DOM.div({
       className: 'app'
-    }, DOM.h1(null, 'ReactJS League Table'), DOM.h2(null, 'Frontend Coding Test'), Table({
-      table: this.state.table
-    }));
+    }, DOM.h1({
+      className: 'title'
+    }, 'ReactJS League Table'), Menu({
+      items: this.props.leagues,
+      handleClick: this._handleClick
+    }), Table(this.props.leagues[this.state.currentId]));
   }
 };
 
 module.exports = React.createClass(App);
 
 
-},{"./table/index.coffee":179,"react":174,"tbg_props_to_state":175,"tbg_react_dom":176}],178:[function(require,module,exports){
+},{"./menu/index.coffee":179,"./table/index.coffee":180,"react":174,"tbg_props_to_state":175,"tbg_react_dom":176}],178:[function(require,module,exports){
 module.exports = {
   App: require('./app.coffee')
 };
 
 
 },{"./app.coffee":177}],179:[function(require,module,exports){
+var DOM, Menu, React;
+
+React = require('react');
+
+DOM = require('tbg_react_dom');
+
+Menu = {
+  displayName: 'Menu',
+  propTypes: {},
+  mixins: [],
+  getInitialState: function() {
+    return {
+      activeId: 0
+    };
+  },
+  getDefaultProps: function() {},
+  componentWillMount: function() {},
+  componentWillReceiveProps: function() {},
+  componentDidMount: function() {},
+  componentWillUnmount: function() {},
+  _handleClick: function(id) {
+    this.setState({
+      activeId: id
+    });
+    return this.props.handleClick(id);
+  },
+  _renderMenu: function() {
+    return this.props.items.map((function(_this) {
+      return function(item, id) {
+        return DOM.li({
+          key: "menu__item_" + id,
+          className: "menu__item " + (_this.state.activeId === id ? 'isActive' : void 0),
+          onClick: _this._handleClick.bind(_this, id)
+        }, item.name);
+      };
+    })(this));
+  },
+  render: function() {
+    return DOM.ul({
+      className: 'menu'
+    }, this._renderMenu());
+  }
+};
+
+module.exports = React.createClass(Menu);
+
+
+},{"react":174,"tbg_react_dom":176}],180:[function(require,module,exports){
 var DOM, React, Table;
 
 React = require('react');
@@ -21991,33 +22049,17 @@ Table = {
   componentWillReceiveProps: function() {},
   componentDidMount: function() {},
   componentWillUnmount: function() {},
-  _renderRow: function(row, i) {
-    if (i == null) {
-      i = 999;
-    }
-    return DOM.div({
-      className: 'league-table__row',
-      key: "row_" + i
-    }, DOM.span({
-      className: 'perc one'
-    }, row.pos), DOM.span({
-      className: 'perc four'
-    }, row.team));
-  },
   _renderTable: function() {
-    var i, ref, row, rows;
-    rows = [
-      this._renderRow({
-        pos: 'POS',
-        team: 'Team Name'
-      })
-    ];
-    ref = this.props.table;
-    for (i in ref) {
-      row = ref[i];
-      rows.push(this._renderRow(row, i));
-    }
-    return rows;
+    return this.props.data.map(function(row, i) {
+      return DOM.div({
+        className: "league-table__row",
+        key: "row_" + i
+      }, DOM.span({
+        className: 'perc one'
+      }, row.pos), DOM.span({
+        className: 'perc four'
+      }, row.team));
+    });
   },
   render: function() {
     return DOM.div({
@@ -22029,302 +22071,1332 @@ Table = {
 module.exports = React.createClass(Table);
 
 
-},{"react":174,"tbg_react_dom":176}],180:[function(require,module,exports){
+},{"react":174,"tbg_react_dom":176}],181:[function(require,module,exports){
 module.exports = {
-  "table": [
-    {
-      "pos": 1,
-      "team": "Chelsea",
-      "path": "chelsea",
-      "p": 38,
-      "w": 26,
-      "d": 9,
-      "l": 3,
-      "gf": 73,
-      "ga": 32,
-      "gd": 41,
-      "pts": 87,
-      "info": "championsleague",
-      "form": ["D", "W", "W", "D", "L", "W"]
-    }, {
-      "pos": 2,
-      "team": "Man City",
-      "path": "manchester-city",
-      "p": 38,
-      "w": 24,
-      "d": 7,
-      "l": 7,
-      "gf": 83,
-      "ga": 38,
-      "gd": 45,
-      "pts": 79,
-      "info": "championsleague",
-      "form": ["W", "W", "W", "W", "W", "W"]
-    }, {
-      "pos": 3,
-      "team": "Arsenal",
-      "path": "arsenal",
-      "p": 38,
-      "w": 22,
-      "d": 9,
-      "l": 7,
-      "gf": 71,
-      "ga": 36,
-      "gd": 35,
-      "pts": 75,
-      "info": "championsleague",
-      "form": ["D", "W", "L", "D", "D", "W"]
-    }, {
-      "pos": 4,
-      "team": "Man Utd",
-      "path": "manchester-united",
-      "p": 38,
-      "w": 20,
-      "d": 10,
-      "l": 8,
-      "gf": 62,
-      "ga": 37,
-      "gd": 25,
-      "pts": 70,
-      "info": "championsleague",
-      "form": ["L", "L", "L", "W", "D", "D"]
-    }, {
-      "pos": 5,
-      "team": "Tottenham",
-      "path": "tottenham-hotspur",
-      "p": 38,
-      "w": 19,
-      "d": 7,
-      "l": 12,
-      "gf": 58,
-      "ga": 53,
-      "gd": 5,
-      "pts": 64,
-      "info": "uefacup",
-      "form": ["W", "D", "L", "L", "W", "W"]
-    }, {
-      "pos": 6,
-      "team": "Liverpool",
-      "path": "liverpool",
-      "p": 38,
-      "w": 18,
-      "d": 8,
-      "l": 12,
-      "gf": 52,
-      "ga": 48,
-      "gd": 4,
-      "pts": 62,
-      "info": null,
-      "form": ["D", "L", "W", "D", "L", "L"]
-    }, {
-      "pos": 7,
-      "team": "Southampton",
-      "path": "southampton",
-      "p": 38,
-      "w": 18,
-      "d": 6,
-      "l": 14,
-      "gf": 54,
-      "ga": 33,
-      "gd": 21,
-      "pts": 60,
-      "info": null,
-      "form": ["L", "D", "L", "L", "W", "L"]
-    }, {
-      "pos": 8,
-      "team": "Swansea",
-      "path": "swansea-city",
-      "p": 38,
-      "w": 16,
-      "d": 8,
-      "l": 14,
-      "gf": 46,
-      "ga": 49,
-      "gd": -3,
-      "pts": 56,
-      "info": null,
-      "form": ["L", "W", "W", "W", "L", "L"]
-    }, {
-      "pos": 9,
-      "team": "Stoke",
-      "path": "stoke-city",
-      "p": 38,
-      "w": 15,
-      "d": 9,
-      "l": 14,
-      "gf": 48,
-      "ga": 45,
-      "gd": 3,
-      "pts": 54,
-      "info": null,
-      "form": ["W", "D", "L", "W", "D", "W"]
-    }, {
-      "pos": 10,
-      "team": "C Palace",
-      "path": "crystal-palace",
-      "p": 38,
-      "w": 13,
-      "d": 9,
-      "l": 16,
-      "gf": 47,
-      "ga": 51,
-      "gd": -4,
-      "pts": 48,
-      "info": null,
-      "form": ["L", "L", "L", "L", "W", "W"]
-    }, {
-      "pos": 11,
-      "team": "Everton",
-      "path": "everton",
-      "p": 38,
-      "w": 12,
-      "d": 11,
-      "l": 15,
-      "gf": 48,
-      "ga": 50,
-      "gd": -2,
-      "pts": 47,
-      "info": null,
-      "form": ["W", "W", "L", "L", "W", "L"]
-    }, {
-      "pos": 12,
-      "team": "West Ham",
-      "path": "west-ham-united",
-      "p": 38,
-      "w": 12,
-      "d": 11,
-      "l": 15,
-      "gf": 44,
-      "ga": 47,
-      "gd": -3,
-      "pts": 47,
-      "info": null,
-      "form": ["L", "D", "W", "L", "L", "L"]
-    }, {
-      "pos": 13,
-      "team": "West Brom",
-      "path": "west-bromwich-albion",
-      "p": 38,
-      "w": 11,
-      "d": 11,
-      "l": 16,
-      "gf": 38,
-      "ga": 50,
-      "gd": -12,
-      "pts": 44,
-      "info": null,
-      "form": ["W", "D", "W", "D", "W", "L"]
-    }, {
-      "pos": 14,
-      "team": "Leicester",
-      "path": "leicester-city",
-      "p": 38,
-      "w": 11,
-      "d": 8,
-      "l": 19,
-      "gf": 46,
-      "ga": 55,
-      "gd": -9,
-      "pts": 41,
-      "info": null,
-      "form": ["W", "L", "W", "W", "D", "W"]
-    }, {
-      "pos": 15,
-      "team": "Newcastle",
-      "path": "newcastle-united",
-      "p": 38,
-      "w": 10,
-      "d": 9,
-      "l": 19,
-      "gf": 40,
-      "ga": 63,
-      "gd": -23,
-      "pts": 39,
-      "info": null,
-      "form": ["L", "L", "L", "D", "L", "W"]
-    }, {
-      "pos": 16,
-      "team": "Sunderland",
-      "path": "sunderland",
-      "p": 38,
-      "w": 7,
-      "d": 17,
-      "l": 14,
-      "gf": 31,
-      "ga": 53,
-      "gd": -22,
-      "pts": 38,
-      "info": null,
-      "form": ["D", "W", "W", "D", "D", "L"]
-    }, {
-      "pos": 17,
-      "team": "Aston Villa",
-      "path": "aston-villa",
-      "p": 38,
-      "w": 10,
-      "d": 8,
-      "l": 20,
-      "gf": 31,
-      "ga": 57,
-      "gd": -26,
-      "pts": 38,
-      "info": null,
-      "form": ["W", "L", "W", "W", "L", "L"]
-    }, {
-      "pos": 18,
-      "team": "Hull",
-      "path": "hull-city",
-      "p": 38,
-      "w": 8,
-      "d": 11,
-      "l": 19,
-      "gf": 33,
-      "ga": 51,
-      "gd": -18,
-      "pts": 35,
-      "info": "relegation",
-      "form": ["W", "W", "L", "L", "L", "D"]
-    }, {
-      "pos": 19,
-      "team": "Burnley",
-      "path": "burnley",
-      "p": 38,
-      "w": 7,
-      "d": 12,
-      "l": 19,
-      "gf": 28,
-      "ga": 53,
-      "gd": -25,
-      "pts": 33,
-      "info": "relegation",
-      "form": ["L", "L", "L", "W", "D", "W"]
-    }, {
-      "pos": 20,
-      "team": "QPR",
-      "path": "queens-park-rangers",
-      "p": 38,
-      "w": 8,
-      "d": 6,
-      "l": 24,
-      "gf": 41,
-      "ga": 73,
-      "gd": -32,
-      "pts": 30,
-      "info": "relegation",
-      "form": ["L", "D", "L", "L", "W", "L"]
-    }
-  ]
+  league_tables: {
+    leagues: [
+      {
+        "name": "Premier League",
+        "data": [
+          {
+            "pos": 1,
+            "team": "Chelsea",
+            "path": "chelsea",
+            "p": 38,
+            "w": 26,
+            "d": 9,
+            "l": 3,
+            "gf": 73,
+            "ga": 32,
+            "gd": 41,
+            "pts": 87,
+            "info": "championsleague",
+            "form": ["D", "W", "W", "D", "L", "W"]
+          }, {
+            "pos": 2,
+            "team": "Man City",
+            "path": "manchester-city",
+            "p": 38,
+            "w": 24,
+            "d": 7,
+            "l": 7,
+            "gf": 83,
+            "ga": 38,
+            "gd": 45,
+            "pts": 79,
+            "info": "championsleague",
+            "form": ["W", "W", "W", "W", "W", "W"]
+          }, {
+            "pos": 3,
+            "team": "Arsenal",
+            "path": "arsenal",
+            "p": 38,
+            "w": 22,
+            "d": 9,
+            "l": 7,
+            "gf": 71,
+            "ga": 36,
+            "gd": 35,
+            "pts": 75,
+            "info": "championsleague",
+            "form": ["D", "W", "L", "D", "D", "W"]
+          }, {
+            "pos": 4,
+            "team": "Man Utd",
+            "path": "manchester-united",
+            "p": 38,
+            "w": 20,
+            "d": 10,
+            "l": 8,
+            "gf": 62,
+            "ga": 37,
+            "gd": 25,
+            "pts": 70,
+            "info": "championsleague",
+            "form": ["L", "L", "L", "W", "D", "D"]
+          }, {
+            "pos": 5,
+            "team": "Tottenham",
+            "path": "tottenham-hotspur",
+            "p": 38,
+            "w": 19,
+            "d": 7,
+            "l": 12,
+            "gf": 58,
+            "ga": 53,
+            "gd": 5,
+            "pts": 64,
+            "info": "uefacup",
+            "form": ["W", "D", "L", "L", "W", "W"]
+          }, {
+            "pos": 6,
+            "team": "Liverpool",
+            "path": "liverpool",
+            "p": 38,
+            "w": 18,
+            "d": 8,
+            "l": 12,
+            "gf": 52,
+            "ga": 48,
+            "gd": 4,
+            "pts": 62,
+            "info": null,
+            "form": ["D", "L", "W", "D", "L", "L"]
+          }, {
+            "pos": 7,
+            "team": "Southampton",
+            "path": "southampton",
+            "p": 38,
+            "w": 18,
+            "d": 6,
+            "l": 14,
+            "gf": 54,
+            "ga": 33,
+            "gd": 21,
+            "pts": 60,
+            "info": null,
+            "form": ["L", "D", "L", "L", "W", "L"]
+          }, {
+            "pos": 8,
+            "team": "Swansea",
+            "path": "swansea-city",
+            "p": 38,
+            "w": 16,
+            "d": 8,
+            "l": 14,
+            "gf": 46,
+            "ga": 49,
+            "gd": -3,
+            "pts": 56,
+            "info": null,
+            "form": ["L", "W", "W", "W", "L", "L"]
+          }, {
+            "pos": 9,
+            "team": "Stoke",
+            "path": "stoke-city",
+            "p": 38,
+            "w": 15,
+            "d": 9,
+            "l": 14,
+            "gf": 48,
+            "ga": 45,
+            "gd": 3,
+            "pts": 54,
+            "info": null,
+            "form": ["W", "D", "L", "W", "D", "W"]
+          }, {
+            "pos": 10,
+            "team": "C Palace",
+            "path": "crystal-palace",
+            "p": 38,
+            "w": 13,
+            "d": 9,
+            "l": 16,
+            "gf": 47,
+            "ga": 51,
+            "gd": -4,
+            "pts": 48,
+            "info": null,
+            "form": ["L", "L", "L", "L", "W", "W"]
+          }, {
+            "pos": 11,
+            "team": "Everton",
+            "path": "everton",
+            "p": 38,
+            "w": 12,
+            "d": 11,
+            "l": 15,
+            "gf": 48,
+            "ga": 50,
+            "gd": -2,
+            "pts": 47,
+            "info": null,
+            "form": ["W", "W", "L", "L", "W", "L"]
+          }, {
+            "pos": 12,
+            "team": "West Ham",
+            "path": "west-ham-united",
+            "p": 38,
+            "w": 12,
+            "d": 11,
+            "l": 15,
+            "gf": 44,
+            "ga": 47,
+            "gd": -3,
+            "pts": 47,
+            "info": null,
+            "form": ["L", "D", "W", "L", "L", "L"]
+          }, {
+            "pos": 13,
+            "team": "West Brom",
+            "path": "west-bromwich-albion",
+            "p": 38,
+            "w": 11,
+            "d": 11,
+            "l": 16,
+            "gf": 38,
+            "ga": 50,
+            "gd": -12,
+            "pts": 44,
+            "info": null,
+            "form": ["W", "D", "W", "D", "W", "L"]
+          }, {
+            "pos": 14,
+            "team": "Leicester",
+            "path": "leicester-city",
+            "p": 38,
+            "w": 11,
+            "d": 8,
+            "l": 19,
+            "gf": 46,
+            "ga": 55,
+            "gd": -9,
+            "pts": 41,
+            "info": null,
+            "form": ["W", "L", "W", "W", "D", "W"]
+          }, {
+            "pos": 15,
+            "team": "Newcastle",
+            "path": "newcastle-united",
+            "p": 38,
+            "w": 10,
+            "d": 9,
+            "l": 19,
+            "gf": 40,
+            "ga": 63,
+            "gd": -23,
+            "pts": 39,
+            "info": null,
+            "form": ["L", "L", "L", "D", "L", "W"]
+          }, {
+            "pos": 16,
+            "team": "Sunderland",
+            "path": "sunderland",
+            "p": 38,
+            "w": 7,
+            "d": 17,
+            "l": 14,
+            "gf": 31,
+            "ga": 53,
+            "gd": -22,
+            "pts": 38,
+            "info": null,
+            "form": ["D", "W", "W", "D", "D", "L"]
+          }, {
+            "pos": 17,
+            "team": "Aston Villa",
+            "path": "aston-villa",
+            "p": 38,
+            "w": 10,
+            "d": 8,
+            "l": 20,
+            "gf": 31,
+            "ga": 57,
+            "gd": -26,
+            "pts": 38,
+            "info": null,
+            "form": ["W", "L", "W", "W", "L", "L"]
+          }, {
+            "pos": 18,
+            "team": "Hull",
+            "path": "hull-city",
+            "p": 38,
+            "w": 8,
+            "d": 11,
+            "l": 19,
+            "gf": 33,
+            "ga": 51,
+            "gd": -18,
+            "pts": 35,
+            "info": "relegation",
+            "form": ["W", "W", "L", "L", "L", "D"]
+          }, {
+            "pos": 19,
+            "team": "Burnley",
+            "path": "burnley",
+            "p": 38,
+            "w": 7,
+            "d": 12,
+            "l": 19,
+            "gf": 28,
+            "ga": 53,
+            "gd": -25,
+            "pts": 33,
+            "info": "relegation",
+            "form": ["L", "L", "L", "W", "D", "W"]
+          }, {
+            "pos": 20,
+            "team": "QPR",
+            "path": "queens-park-rangers",
+            "p": 38,
+            "w": 8,
+            "d": 6,
+            "l": 24,
+            "gf": 41,
+            "ga": 73,
+            "gd": -32,
+            "pts": 30,
+            "info": "relegation",
+            "form": ["L", "D", "L", "L", "W", "L"]
+          }
+        ]
+      }, {
+        "name": "Championship",
+        "data": [
+          {
+            "pos": 1,
+            "team": "Bournemouth",
+            "path": "afc-bournemouth",
+            "p": 46,
+            "w": 26,
+            "d": 12,
+            "l": 8,
+            "gf": 98,
+            "ga": 45,
+            "gd": 53,
+            "pts": 90,
+            "info": "championsleague",
+            "form": ["W", "W", "W", "D", "W", "W"]
+          }, {
+            "pos": 2,
+            "team": "Watford",
+            "path": "watford",
+            "p": 46,
+            "w": 27,
+            "d": 8,
+            "l": 11,
+            "gf": 91,
+            "ga": 50,
+            "gd": 41,
+            "pts": 89,
+            "info": "championsleague",
+            "form": ["W", "W", "W", "W", "W", "D"]
+          }, {
+            "pos": 3,
+            "team": "Norwich",
+            "path": "norwich-city",
+            "p": 46,
+            "w": 25,
+            "d": 11,
+            "l": 10,
+            "gf": 88,
+            "ga": 48,
+            "gd": 40,
+            "pts": 86,
+            "info": "uefacup",
+            "form": ["L", "D", "W", "D", "W", "W"]
+          }, {
+            "pos": 4,
+            "team": "M'boro",
+            "path": "middlesbrough",
+            "p": 46,
+            "w": 25,
+            "d": 10,
+            "l": 11,
+            "gf": 68,
+            "ga": 37,
+            "gd": 31,
+            "pts": 85,
+            "info": "uefacup",
+            "form": ["W", "L", "D", "W", "W", "L"]
+          }, {
+            "pos": 5,
+            "team": "Brentford",
+            "path": "brentford",
+            "p": 46,
+            "w": 23,
+            "d": 9,
+            "l": 14,
+            "gf": 78,
+            "ga": 59,
+            "gd": 19,
+            "pts": 78,
+            "info": "uefacup",
+            "form": ["L", "D", "W", "W", "L", "L"]
+          }, {
+            "pos": 6,
+            "team": "Ipswich",
+            "path": "ipswich-town",
+            "p": 46,
+            "w": 22,
+            "d": 12,
+            "l": 12,
+            "gf": 72,
+            "ga": 54,
+            "gd": 18,
+            "pts": 78,
+            "info": "uefacup",
+            "form": ["W", "D", "W", "L", "D", "L"]
+          }, {
+            "pos": 7,
+            "team": "Wolves",
+            "path": "wolverhampton-wanderers",
+            "p": 46,
+            "w": 22,
+            "d": 12,
+            "l": 12,
+            "gf": 70,
+            "ga": 56,
+            "gd": 14,
+            "pts": 78,
+            "info": null,
+            "form": ["W", "L", "L", "D", "W", "W"]
+          }, {
+            "pos": 8,
+            "team": "Derby",
+            "path": "derby-county",
+            "p": 46,
+            "w": 21,
+            "d": 14,
+            "l": 11,
+            "gf": 85,
+            "ga": 56,
+            "gd": 29,
+            "pts": 77,
+            "info": null,
+            "form": ["W", "D", "W", "D", "D", "L"]
+          }, {
+            "pos": 9,
+            "team": "Blackburn",
+            "path": "blackburn-rovers",
+            "p": 46,
+            "w": 17,
+            "d": 16,
+            "l": 13,
+            "gf": 66,
+            "ga": 59,
+            "gd": 7,
+            "pts": 67,
+            "info": null,
+            "form": ["D", "D", "D", "W", "D", "W"]
+          }, {
+            "pos": 10,
+            "team": "Birmingham",
+            "path": "birmingham-city",
+            "p": 46,
+            "w": 16,
+            "d": 15,
+            "l": 15,
+            "gf": 53,
+            "ga": 64,
+            "gd": -11,
+            "pts": 63,
+            "info": null,
+            "form": ["W", "D", "L", "W", "W", "W"]
+          }, {
+            "pos": 11,
+            "team": "Cardiff",
+            "path": "cardiff-city",
+            "p": 46,
+            "w": 16,
+            "d": 14,
+            "l": 16,
+            "gf": 57,
+            "ga": 61,
+            "gd": -4,
+            "pts": 62,
+            "info": null,
+            "form": ["L", "W", "L", "D", "W", "W"]
+          }, {
+            "pos": 12,
+            "team": "Charlton",
+            "path": "charlton-athletic",
+            "p": 46,
+            "w": 14,
+            "d": 18,
+            "l": 14,
+            "gf": 54,
+            "ga": 60,
+            "gd": -6,
+            "pts": 60,
+            "info": null,
+            "form": ["D", "D", "D", "W", "L", "L"]
+          }, {
+            "pos": 13,
+            "team": "SheffWed",
+            "path": "sheffield-wednesday",
+            "p": 46,
+            "w": 14,
+            "d": 18,
+            "l": 14,
+            "gf": 43,
+            "ga": 49,
+            "gd": -6,
+            "pts": 60,
+            "info": null,
+            "form": ["L", "D", "W", "D", "L", "D"]
+          }, {
+            "pos": 14,
+            "team": "NottForest",
+            "path": "nottingham-forest",
+            "p": 46,
+            "w": 15,
+            "d": 14,
+            "l": 17,
+            "gf": 71,
+            "ga": 69,
+            "gd": 2,
+            "pts": 59,
+            "info": null,
+            "form": ["D", "L", "L", "D", "L", "L"]
+          }, {
+            "pos": 15,
+            "team": "Leeds",
+            "path": "leeds-united",
+            "p": 46,
+            "w": 15,
+            "d": 11,
+            "l": 20,
+            "gf": 50,
+            "ga": 61,
+            "gd": -11,
+            "pts": 56,
+            "info": null,
+            "form": ["L", "L", "L", "L", "W", "D"]
+          }, {
+            "pos": 16,
+            "team": "Huddersf'ld",
+            "path": "huddersfield-town",
+            "p": 47,
+            "w": 13,
+            "d": 17,
+            "l": 17,
+            "gf": 58,
+            "ga": 75,
+            "gd": -17,
+            "pts": 56,
+            "info": null,
+            "form": ["W", "W", "D", "D", "D", "D"]
+          }, {
+            "pos": 17,
+            "team": "Fulham",
+            "path": "fulham",
+            "p": 46,
+            "w": 14,
+            "d": 10,
+            "l": 22,
+            "gf": 62,
+            "ga": 83,
+            "gd": -21,
+            "pts": 52,
+            "info": null,
+            "form": ["D", "D", "D", "W", "W", "L"]
+          }, {
+            "pos": 18,
+            "team": "Bolton",
+            "path": "bolton-wanderers",
+            "p": 46,
+            "w": 13,
+            "d": 12,
+            "l": 21,
+            "gf": 54,
+            "ga": 67,
+            "gd": -13,
+            "pts": 51,
+            "info": null,
+            "form": ["W", "L", "D", "D", "L", "L"]
+          }, {
+            "pos": 19,
+            "team": "Reading",
+            "path": "reading",
+            "p": 46,
+            "w": 13,
+            "d": 11,
+            "l": 22,
+            "gf": 48,
+            "ga": 69,
+            "gd": -21,
+            "pts": 50,
+            "info": null,
+            "form": ["D", "L", "L", "L", "L", "W"]
+          }, {
+            "pos": 20,
+            "team": "Brighton",
+            "path": "brighton-and-hove-albion",
+            "p": 46,
+            "w": 10,
+            "d": 17,
+            "l": 19,
+            "gf": 44,
+            "ga": 53,
+            "gd": -9,
+            "pts": 47,
+            "info": null,
+            "form": ["L", "L", "D", "L", "L", "D"]
+          }, {
+            "pos": 21,
+            "team": "Rotherham",
+            "path": "rotherham-united",
+            "p": 46,
+            "w": 11,
+            "d": 16,
+            "l": 19,
+            "gf": 46,
+            "ga": 67,
+            "gd": -21,
+            "pts": 46,
+            "info": null,
+            "form": ["W", "L", "D", "D", "W", "D"]
+          }, {
+            "pos": 22,
+            "team": "Millwall",
+            "path": "millwall",
+            "p": 46,
+            "w": 9,
+            "d": 14,
+            "l": 23,
+            "gf": 42,
+            "ga": 76,
+            "gd": -34,
+            "pts": 41,
+            "info": "relegation",
+            "form": ["L", "W", "D", "L", "D", "L"]
+          }, {
+            "pos": 23,
+            "team": "Wigan",
+            "path": "wigan-athletic",
+            "p": 46,
+            "w": 9,
+            "d": 12,
+            "l": 25,
+            "gf": 39,
+            "ga": 64,
+            "gd": -25,
+            "pts": 39,
+            "info": "relegation",
+            "form": ["L", "D", "L", "W", "L", "L"]
+          }, {
+            "pos": 24,
+            "team": "Blackpool",
+            "path": "blackpool",
+            "p": 47,
+            "w": 4,
+            "d": 15,
+            "l": 28,
+            "gf": 36,
+            "ga": 91,
+            "gd": -55,
+            "pts": 27,
+            "info": "relegation",
+            "form": ["D", "L", "L", "L", "L", "D"]
+          }
+        ]
+      }, {
+        "name": "League One",
+        "data": [
+          {
+            "pos": 1,
+            "team": "BristolC",
+            "path": "bristol-city",
+            "p": 46,
+            "w": 29,
+            "d": 12,
+            "l": 5,
+            "gf": 96,
+            "ga": 38,
+            "gd": 58,
+            "pts": 99,
+            "info": "championsleague",
+            "form": ["W", "D", "W", "D", "W", "W"]
+          }, {
+            "pos": 2,
+            "team": "MKDons",
+            "path": "milton-keynes-dons",
+            "p": 46,
+            "w": 27,
+            "d": 10,
+            "l": 9,
+            "gf": 101,
+            "ga": 44,
+            "gd": 57,
+            "pts": 91,
+            "info": "championsleague",
+            "form": ["D", "W", "W", "W", "W", "W"]
+          }, {
+            "pos": 3,
+            "team": "Preston",
+            "path": "preston-north-end",
+            "p": 46,
+            "w": 25,
+            "d": 14,
+            "l": 7,
+            "gf": 79,
+            "ga": 40,
+            "gd": 39,
+            "pts": 89,
+            "info": "uefacup",
+            "form": ["W", "W", "L", "W", "W", "W"]
+          }, {
+            "pos": 4,
+            "team": "Swindon",
+            "path": "swindon-town",
+            "p": 46,
+            "w": 23,
+            "d": 10,
+            "l": 13,
+            "gf": 76,
+            "ga": 57,
+            "gd": 19,
+            "pts": 79,
+            "info": "uefacup",
+            "form": ["L", "D", "D", "W", "D", "L"]
+          }, {
+            "pos": 5,
+            "team": "SheffUtd",
+            "path": "sheffield-united",
+            "p": 46,
+            "w": 19,
+            "d": 14,
+            "l": 13,
+            "gf": 66,
+            "ga": 53,
+            "gd": 13,
+            "pts": 71,
+            "info": "uefacup",
+            "form": ["L", "D", "D", "D", "L", "D"]
+          }, {
+            "pos": 6,
+            "team": "Chest'field",
+            "path": "chesterfield",
+            "p": 46,
+            "w": 19,
+            "d": 12,
+            "l": 15,
+            "gf": 68,
+            "ga": 55,
+            "gd": 13,
+            "pts": 69,
+            "info": "uefacup",
+            "form": ["W", "D", "L", "D", "L", "L"]
+          }, {
+            "pos": 7,
+            "team": "Bradford",
+            "path": "bradford-city",
+            "p": 46,
+            "w": 17,
+            "d": 14,
+            "l": 15,
+            "gf": 55,
+            "ga": 55,
+            "gd": 0,
+            "pts": 65,
+            "info": null,
+            "form": ["L", "L", "D", "D", "W", "W"]
+          }, {
+            "pos": 8,
+            "team": "Rochdale",
+            "path": "rochdale",
+            "p": 46,
+            "w": 19,
+            "d": 6,
+            "l": 21,
+            "gf": 72,
+            "ga": 66,
+            "gd": 6,
+            "pts": 63,
+            "info": null,
+            "form": ["D", "L", "L", "W", "L", "L"]
+          }, {
+            "pos": 9,
+            "team": "Peterboro'",
+            "path": "peterborough-united",
+            "p": 46,
+            "w": 18,
+            "d": 9,
+            "l": 19,
+            "gf": 53,
+            "ga": 56,
+            "gd": -3,
+            "pts": 63,
+            "info": null,
+            "form": ["D", "L", "D", "D", "W", "D"]
+          }, {
+            "pos": 10,
+            "team": "Fleetwood",
+            "path": "fleetwood-town",
+            "p": 46,
+            "w": 17,
+            "d": 12,
+            "l": 17,
+            "gf": 49,
+            "ga": 52,
+            "gd": -3,
+            "pts": 63,
+            "info": null,
+            "form": ["W", "L", "L", "D", "L", "W"]
+          }, {
+            "pos": 11,
+            "team": "Barnsley",
+            "path": "barnsley",
+            "p": 46,
+            "w": 17,
+            "d": 11,
+            "l": 18,
+            "gf": 62,
+            "ga": 61,
+            "gd": 1,
+            "pts": 62,
+            "info": null,
+            "form": ["L", "D", "D", "D", "L", "W"]
+          }, {
+            "pos": 12,
+            "team": "Gillingham",
+            "path": "gillingham",
+            "p": 46,
+            "w": 16,
+            "d": 14,
+            "l": 16,
+            "gf": 65,
+            "ga": 66,
+            "gd": -1,
+            "pts": 62,
+            "info": null,
+            "form": ["D", "W", "D", "W", "L", "W"]
+          }, {
+            "pos": 13,
+            "team": "Doncaster",
+            "path": "doncaster-rovers",
+            "p": 46,
+            "w": 16,
+            "d": 13,
+            "l": 17,
+            "gf": 58,
+            "ga": 62,
+            "gd": -4,
+            "pts": 61,
+            "info": null,
+            "form": ["D", "W", "D", "L", "L", "W"]
+          }, {
+            "pos": 14,
+            "team": "Walsall",
+            "path": "walsall",
+            "p": 46,
+            "w": 14,
+            "d": 17,
+            "l": 15,
+            "gf": 50,
+            "ga": 54,
+            "gd": -4,
+            "pts": 59,
+            "info": null,
+            "form": ["W", "W", "D", "D", "W", "L"]
+          }, {
+            "pos": 15,
+            "team": "Oldham",
+            "path": "oldham-athletic",
+            "p": 46,
+            "w": 14,
+            "d": 15,
+            "l": 17,
+            "gf": 54,
+            "ga": 67,
+            "gd": -13,
+            "pts": 57,
+            "info": null,
+            "form": ["L", "D", "D", "D", "L", "D"]
+          }, {
+            "pos": 16,
+            "team": "Scunthorpe",
+            "path": "scunthorpe-united",
+            "p": 46,
+            "w": 14,
+            "d": 14,
+            "l": 18,
+            "gf": 62,
+            "ga": 75,
+            "gd": -13,
+            "pts": 56,
+            "info": null,
+            "form": ["W", "D", "D", "D", "W", "L"]
+          }, {
+            "pos": 17,
+            "team": "Coventry",
+            "path": "coventry-city",
+            "p": 46,
+            "w": 13,
+            "d": 16,
+            "l": 17,
+            "gf": 49,
+            "ga": 60,
+            "gd": -11,
+            "pts": 55,
+            "info": null,
+            "form": ["D", "W", "D", "D", "L", "W"]
+          }, {
+            "pos": 18,
+            "team": "PortVale",
+            "path": "port-vale",
+            "p": 46,
+            "w": 15,
+            "d": 9,
+            "l": 22,
+            "gf": 55,
+            "ga": 65,
+            "gd": -10,
+            "pts": 54,
+            "info": null,
+            "form": ["L", "D", "D", "D", "W", "L"]
+          }, {
+            "pos": 19,
+            "team": "Colchester",
+            "path": "colchester-united",
+            "p": 46,
+            "w": 14,
+            "d": 10,
+            "l": 22,
+            "gf": 58,
+            "ga": 77,
+            "gd": -19,
+            "pts": 52,
+            "info": null,
+            "form": ["L", "L", "D", "W", "D", "W"]
+          }, {
+            "pos": 20,
+            "team": "Crewe",
+            "path": "crewe-alexandra",
+            "p": 46,
+            "w": 14,
+            "d": 10,
+            "l": 22,
+            "gf": 43,
+            "ga": 75,
+            "gd": -32,
+            "pts": 52,
+            "info": null,
+            "form": ["L", "D", "D", "D", "W", "L"]
+          }, {
+            "pos": 21,
+            "team": "NottCounty",
+            "path": "notts-county",
+            "p": 46,
+            "w": 12,
+            "d": 14,
+            "l": 20,
+            "gf": 45,
+            "ga": 63,
+            "gd": -18,
+            "pts": 50,
+            "info": "relegation",
+            "form": ["D", "D", "L", "L", "W", "L"]
+          }, {
+            "pos": 22,
+            "team": "Crawley",
+            "path": "crawley-town",
+            "p": 46,
+            "w": 13,
+            "d": 11,
+            "l": 22,
+            "gf": 53,
+            "ga": 79,
+            "gd": -26,
+            "pts": 50,
+            "info": "relegation",
+            "form": ["W", "L", "L", "W", "L", "L"]
+          }, {
+            "pos": 23,
+            "team": "LeytonO",
+            "path": "leyton-orient",
+            "p": 46,
+            "w": 12,
+            "d": 13,
+            "l": 21,
+            "gf": 59,
+            "ga": 69,
+            "gd": -10,
+            "pts": 49,
+            "info": "relegation",
+            "form": ["D", "L", "L", "L", "D", "D"]
+          }, {
+            "pos": 24,
+            "team": "Yeovil",
+            "path": "yeovil-town",
+            "p": 46,
+            "w": 10,
+            "d": 10,
+            "l": 26,
+            "gf": 36,
+            "ga": 75,
+            "gd": -39,
+            "pts": 40,
+            "info": "relegation",
+            "form": ["L", "D", "W", "W", "L", "L"]
+          }
+        ]
+      }, {
+        "name": "League Two",
+        "data": [
+          {
+            "pos": 1,
+            "team": "Burton",
+            "path": "burton-albion",
+            "p": 46,
+            "w": 28,
+            "d": 10,
+            "l": 8,
+            "gf": 69,
+            "ga": 39,
+            "gd": 30,
+            "pts": 94,
+            "info": "championsleague",
+            "form": ["W", "W", "D", "W", "W", "W"]
+          }, {
+            "pos": 2,
+            "team": "Shrewsbury",
+            "path": "shrewsbury-town",
+            "p": 46,
+            "w": 27,
+            "d": 8,
+            "l": 11,
+            "gf": 67,
+            "ga": 31,
+            "gd": 36,
+            "pts": 89,
+            "info": "championsleague",
+            "form": ["W", "W", "L", "W", "W", "L"]
+          }, {
+            "pos": 3,
+            "team": "Bury",
+            "path": "bury",
+            "p": 46,
+            "w": 26,
+            "d": 7,
+            "l": 13,
+            "gf": 60,
+            "ga": 40,
+            "gd": 20,
+            "pts": 85,
+            "info": "championsleague",
+            "form": ["W", "W", "W", "L", "W", "W"]
+          }, {
+            "pos": 4,
+            "team": "Wycombe",
+            "path": "wycombe-wanderers",
+            "p": 46,
+            "w": 23,
+            "d": 15,
+            "l": 8,
+            "gf": 67,
+            "ga": 45,
+            "gd": 22,
+            "pts": 84,
+            "info": "uefacup",
+            "form": ["D", "L", "W", "W", "W", "D"]
+          }, {
+            "pos": 5,
+            "team": "Southend",
+            "path": "southend-united",
+            "p": 46,
+            "w": 24,
+            "d": 12,
+            "l": 10,
+            "gf": 54,
+            "ga": 38,
+            "gd": 16,
+            "pts": 84,
+            "info": "uefacup",
+            "form": ["W", "W", "L", "D", "W", "D"]
+          }, {
+            "pos": 6,
+            "team": "Stevenage",
+            "path": "stevenage",
+            "p": 46,
+            "w": 20,
+            "d": 12,
+            "l": 14,
+            "gf": 62,
+            "ga": 54,
+            "gd": 8,
+            "pts": 72,
+            "info": "uefacup",
+            "form": ["W", "D", "W", "L", "D", "L"]
+          }, {
+            "pos": 7,
+            "team": "Plymouth A",
+            "path": "plymouth-argyle",
+            "p": 46,
+            "w": 20,
+            "d": 11,
+            "l": 15,
+            "gf": 55,
+            "ga": 37,
+            "gd": 18,
+            "pts": 71,
+            "info": "uefacup",
+            "form": ["D", "L", "W", "W", "L", "L"]
+          }, {
+            "pos": 8,
+            "team": "Luton Town",
+            "path": "luton-town",
+            "p": 46,
+            "w": 19,
+            "d": 11,
+            "l": 16,
+            "gf": 54,
+            "ga": 44,
+            "gd": 10,
+            "pts": 68,
+            "info": null,
+            "form": ["W", "L", "D", "W", "L", "W"]
+          }, {
+            "pos": 9,
+            "team": "Newport C",
+            "path": "newport-county",
+            "p": 46,
+            "w": 18,
+            "d": 11,
+            "l": 17,
+            "gf": 51,
+            "ga": 54,
+            "gd": -3,
+            "pts": 65,
+            "info": null,
+            "form": ["L", "L", "L", "L", "W", "L"]
+          }, {
+            "pos": 10,
+            "team": "Exeter",
+            "path": "exeter-city",
+            "p": 46,
+            "w": 17,
+            "d": 13,
+            "l": 16,
+            "gf": 61,
+            "ga": 65,
+            "gd": -4,
+            "pts": 64,
+            "info": null,
+            "form": ["W", "L", "L", "L", "L", "W"]
+          }, {
+            "pos": 11,
+            "team": "Morecambe",
+            "path": "morecambe",
+            "p": 46,
+            "w": 17,
+            "d": 12,
+            "l": 17,
+            "gf": 53,
+            "ga": 52,
+            "gd": 1,
+            "pts": 63,
+            "info": null,
+            "form": ["W", "W", "L", "L", "W", "W"]
+          }, {
+            "pos": 12,
+            "team": "Northampton",
+            "path": "northampton-town",
+            "p": 46,
+            "w": 18,
+            "d": 7,
+            "l": 21,
+            "gf": 67,
+            "ga": 62,
+            "gd": 5,
+            "pts": 61,
+            "info": null,
+            "form": ["L", "L", "D", "W", "L", "L"]
+          }, {
+            "pos": 13,
+            "team": "Oxford Utd",
+            "path": "oxford-united",
+            "p": 46,
+            "w": 15,
+            "d": 16,
+            "l": 15,
+            "gf": 50,
+            "ga": 49,
+            "gd": 1,
+            "pts": 61,
+            "info": null,
+            "form": ["D", "D", "D", "W", "W", "W"]
+          }, {
+            "pos": 14,
+            "team": "Dagenham",
+            "path": "dagenham-and-redbridge",
+            "p": 46,
+            "w": 17,
+            "d": 8,
+            "l": 21,
+            "gf": 58,
+            "ga": 59,
+            "gd": -1,
+            "pts": 59,
+            "info": null,
+            "form": ["W", "L", "D", "W", "W", "L"]
+          }, {
+            "pos": 15,
+            "team": "Wimbledon",
+            "path": "afc-wimbledon",
+            "p": 46,
+            "w": 14,
+            "d": 16,
+            "l": 16,
+            "gf": 54,
+            "ga": 60,
+            "gd": -6,
+            "pts": 58,
+            "info": null,
+            "form": ["L", "D", "D", "D", "L", "D"]
+          }, {
+            "pos": 16,
+            "team": "Portsmouth",
+            "path": "portsmouth",
+            "p": 46,
+            "w": 14,
+            "d": 15,
+            "l": 17,
+            "gf": 52,
+            "ga": 54,
+            "gd": -2,
+            "pts": 57,
+            "info": null,
+            "form": ["W", "L", "L", "L", "W", "D"]
+          }, {
+            "pos": 17,
+            "team": "Accrington",
+            "path": "accrington-stanley",
+            "p": 46,
+            "w": 15,
+            "d": 11,
+            "l": 20,
+            "gf": 58,
+            "ga": 77,
+            "gd": -19,
+            "pts": 56,
+            "info": null,
+            "form": ["W", "D", "D", "D", "L", "W"]
+          }, {
+            "pos": 18,
+            "team": "York City",
+            "path": "york",
+            "p": 46,
+            "w": 11,
+            "d": 19,
+            "l": 16,
+            "gf": 46,
+            "ga": 51,
+            "gd": -5,
+            "pts": 52,
+            "info": null,
+            "form": ["D", "W", "W", "L", "L", "D"]
+          }, {
+            "pos": 19,
+            "team": "Cambridge U",
+            "path": "cambridge-united",
+            "p": 46,
+            "w": 13,
+            "d": 12,
+            "l": 21,
+            "gf": 61,
+            "ga": 66,
+            "gd": -5,
+            "pts": 51,
+            "info": null,
+            "form": ["W", "D", "L", "W", "L", "L"]
+          }, {
+            "pos": 20,
+            "team": "Carlisle",
+            "path": "carlisle-united",
+            "p": 46,
+            "w": 14,
+            "d": 8,
+            "l": 24,
+            "gf": 56,
+            "ga": 74,
+            "gd": -18,
+            "pts": 50,
+            "info": null,
+            "form": ["L", "W", "D", "W", "L", "D"]
+          }, {
+            "pos": 21,
+            "team": "Mansfield T",
+            "path": "mansfield-town",
+            "p": 46,
+            "w": 13,
+            "d": 9,
+            "l": 24,
+            "gf": 38,
+            "ga": 62,
+            "gd": -24,
+            "pts": 48,
+            "info": null,
+            "form": ["L", "L", "W", "L", "L", "L"]
+          }, {
+            "pos": 22,
+            "team": "Hartlepool",
+            "path": "hartlepool-united",
+            "p": 46,
+            "w": 12,
+            "d": 9,
+            "l": 25,
+            "gf": 39,
+            "ga": 70,
+            "gd": -31,
+            "pts": 45,
+            "info": null,
+            "form": ["L", "L", "D", "L", "W", "D"]
+          }, {
+            "pos": 23,
+            "team": "Cheltenham",
+            "path": "cheltenham-town",
+            "p": 46,
+            "w": 9,
+            "d": 14,
+            "l": 23,
+            "gf": 40,
+            "ga": 67,
+            "gd": -27,
+            "pts": 41,
+            "info": "relegation",
+            "form": ["L", "L", "W", "L", "L", "D"]
+          }, {
+            "pos": 24,
+            "team": "Tranmere",
+            "path": "tranmere-rovers",
+            "p": 46,
+            "w": 9,
+            "d": 12,
+            "l": 25,
+            "gf": 45,
+            "ga": 67,
+            "gd": -22,
+            "pts": 39,
+            "info": "relegation",
+            "form": ["L", "L", "L", "L", "L", "L"]
+          }
+        ]
+      }
+    ]
+  }
 };
 
 
-},{}],181:[function(require,module,exports){
+},{}],182:[function(require,module,exports){
 var Components, Data, React, RenderUI;
 
 React = require('react');
 
 Components = require('./components/manifest.coffee');
 
-Data = require('./data/league_table.json.coffee');
+Data = require('./data/league_table.coffee');
 
 RenderUI = function() {
   var components;
@@ -22334,9 +23406,7 @@ RenderUI = function() {
     name = el.getAttribute('data-component-ui');
     data = el.getAttribute('data-component-data');
     component = React.createFactory(Components[name]);
-    props = {
-      "data": Data[data]
-    };
+    props = Data[data];
     return React.render(component(props), el);
   });
 };
@@ -22344,4 +23414,4 @@ RenderUI = function() {
 module.exports = new RenderUI();
 
 
-},{"./components/manifest.coffee":178,"./data/league_table.json.coffee":180,"react":174}]},{},[177,178,179,180,181]);
+},{"./components/manifest.coffee":178,"./data/league_table.coffee":181,"react":174}]},{},[177,178,179,180,181,182]);

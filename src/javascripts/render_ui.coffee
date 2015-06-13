@@ -1,7 +1,7 @@
 React = require('react')
 
 Components  = require('./components/manifest.coffee')
-Data        = require('./data/league_table.json.coffee')
+Data        = require('./data/league_table.coffee')
 
 # Render React UI
 #
@@ -18,9 +18,7 @@ RenderUI = ->
     data = el.getAttribute('data-component-data')
 
     component = React.createFactory(Components[name])
-    props     = {
-                  "data" : Data[ data ]
-                }
+    props     = Data[ data ]
 
     React.render(component(props), el)
   )

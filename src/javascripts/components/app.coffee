@@ -70,7 +70,7 @@ App =
       },
         DOM.h1({
           className   : 'title'
-          }, 'ReactJS League Table')
+          }, 'React League Tables')
 
         Menu({
           items       : @props.leagues

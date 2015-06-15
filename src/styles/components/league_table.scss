@@ -1,0 +1,24 @@
+// League table
+
+.league-table {
+  border: 1px solid #ccc;
+  margin: 0.5em;
+}
+
+.league-table__header {
+  border-bottom: 1px solid #ccc;
+}
+.league-table__row {
+  width: 100%;
+
+  &:nth-child(even) {
+    background-color: #efefef;
+  }
+  > span { padding: 0.5em; }
+
+
+  > .pos {}
+  > .team {
+    border-left: 1px solid #ccc;
+  }
+}

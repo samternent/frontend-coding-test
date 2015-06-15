@@ -1,4 +1,4 @@
-# React.js League Tables
+# React League Tables
 
 ### Fork this repo and follow the steps below
 
@@ -13,7 +13,7 @@ $ node app              // start server
 
 Your app should now be running on [localhost:3000](http://localhost:3000)
 
-## TODO::
+## TODO
 Make some changes in [src/javascripts/components/table/index.coffee](https://github.com/samternent/frontend-coding-test/blob/master/src/javascripts/components/table/index.coffee) to:
 
 + Add more data to the league table, including: `p, w, d, l, gf, ga, gd, pts` [ +1 ]

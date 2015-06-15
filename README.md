@@ -1,17 +1,22 @@
-# ReactJS Coding test
+# ReactJS League Tables
 
-Fork this repo
-
-***
-
-`npm install`
-
-`grunt dev` for watcher
-
-`node app` to start server
+Fork this repo and follow the steps below
 
 ***
+Make sure you have [`npm`](http://blog.npmjs.org/post/85484771375/how-to-install-npm) installed then run:
 
-App is now running on `localhost:3000`
+```
+$ npm install           // install package dependencies
+$ grunt dev             // start watcher for coffeescript and scss
+$ node app              // start server
+```
 
-Changes to be made in: [src/javascripts/components/table/index.coffee](https://github.com/samternent/frontend-coding-test/blob/master/src/javascripts/components/table/index.coffee)
+
+Your app should now be running on [localhost:3000](http://localhost:3000)
+
+## TODO
+Make some changes in [src/javascripts/components/table/index.coffee](https://github.com/samternent/frontend-coding-test/blob/master/src/javascripts/components/table/index.coffee) to:
+
++ Add more data to the league table, including: `p, w, d, l, gf, ga, gd, pts`
++ Add some styling to the the league table      [ +1 ]
++ Add a *recent form* indicator to the table    [ +1 ]

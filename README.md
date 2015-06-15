@@ -1,8 +1,7 @@
 # ReactJS League Tables
 
-Fork this repo and follow the steps below
+### Fork this repo and follow the steps below
 
-***
 Make sure you have [`npm`](http://blog.npmjs.org/post/85484771375/how-to-install-npm) installed then run:
 
 ```

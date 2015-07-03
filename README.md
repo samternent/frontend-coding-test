@@ -6,7 +6,7 @@ Make sure you have [`npm`](http://blog.npmjs.org/post/85484771375/how-to-install
 
 ```
 $ npm install           // install package dependencies
-$ grunt dev             // start watcher for coffeescript and scss
+$ grunt bundle          // build JS and CSS
 $ node app              // start server
 ```
 
@@ -14,6 +14,9 @@ $ node app              // start server
 Your app should now be running on [localhost:3000](http://localhost:3000)
 
 ## TODO
+
+Start coffeescript and sass watcher: `$ grunt dev`
+
 Make some changes in [src/javascripts/components/table/index.coffee](https://github.com/samternent/frontend-coding-test/blob/master/src/javascripts/components/table/index.coffee) to:
 
 + Add more data to the league table, including: `p, w, d, l, gf, ga, gd, pts` [ +1 ]
